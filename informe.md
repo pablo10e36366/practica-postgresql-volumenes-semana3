@@ -2,7 +2,7 @@
 
 **Asignatura:** Tendencias Tecnológicas · **Semana:** 3  
 **Estudiante:** Pablo Ortega · **Carrera:** Desarrollo de Software  
-**Instituto:** Sudamericano · **Fecha:** 26 de octubre de 2026 (Ecuador, UTC−5)
+**Instituto:** Sudamericano · **Fecha:** 26 de octubre de 2026 
 
 ## 1. Título
 
@@ -10,7 +10,7 @@ Crear volúmenes para persistir bases de datos con PostgreSQL 16 y Docker, compa
 
 ## 2. Tiempo de duración
 
-La preparación, ejecución, comprobaciones gráficas y documentación emplearon aproximadamente **31.7 minutos** hasta guardar esta versión del informe. El ensayo final que muestran las capturas duró **44.46 segundos (0.74 minutos)**, entre las 21:24:15 y las 21:24:59 de Ecuador. La primera ejecución, que incluyó descargar la imagen, tomó 114,58 segundos. Las marcas exactas del ensayo fotografiado constan en [resultados.json](evidencias/resultados.json).
+La práctica tuvo una duración aproximada de 50 minutos. Durante este tiempo se realizó la configuración de los contenedores PostgreSQL, la creación de las bases de datos y las pruebas para comprobar qué sucede con la información al eliminar y volver a crear los contenedores, tanto con volumen como sin reutilizar uno.
 
 ## 3. Fundamentos
 
