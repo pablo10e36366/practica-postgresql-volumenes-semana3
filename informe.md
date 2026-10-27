@@ -10,7 +10,7 @@ Crear volúmenes para persistir bases de datos con PostgreSQL 16 y Docker, compa
 
 ## 2. Tiempo de duración
 
-Se registraron aproximadamente **16.2 minutos** de preparación, ejecución y documentación hasta guardar esta versión del informe. El ensayo final que muestran las capturas duró **44.46 segundos (0.74 minutos)**, entre las 21:24:15 y las 21:24:59 de Ecuador. La primera ejecución, que incluyó descargar la imagen, tomó 114,58 segundos. Las marcas exactas del ensayo fotografiado constan en [resultados.json](evidencias/resultados.json).
+La preparación, ejecución, comprobaciones gráficas y documentación emplearon aproximadamente **31.7 minutos** hasta guardar esta versión del informe. El ensayo final que muestran las capturas duró **44.46 segundos (0.74 minutos)**, entre las 21:24:15 y las 21:24:59 de Ecuador. La primera ejecución, que incluyó descargar la imagen, tomó 114,58 segundos. Las marcas exactas del ensayo fotografiado constan en [resultados.json](evidencias/resultados.json).
 
 ## 3. Fundamentos
 
