@@ -1,0 +1,9 @@
+> docker volume create --label edu.practica=postgresql-volumenes-semana3-pablo-ortega pgdata
+pgdata
+
+[codigo de salida: 0]
+
+> docker volume inspect pgdata --format "Nombre={{.Name}} Controlador={{.Driver}}"
+Nombre=pgdata Controlador=local
+
+[codigo de salida: 0]

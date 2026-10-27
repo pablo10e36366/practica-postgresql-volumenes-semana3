@@ -1,0 +1,21 @@
+> docker version --format "Cliente={{.Client.Version}} Servidor={{.Server.Version}}"
+Cliente=29.4.1 Servidor=29.4.1
+
+[codigo de salida: 0]
+
+> docker info --format "Motor={{.OSType}} / {{.OperatingSystem}}"
+Motor=linux / Docker Desktop
+
+[codigo de salida: 0]
+
+> wsl -d Ubuntu -- head -n 3 /etc/os-release
+PRETTY_NAME="Ubuntu 24.04.4 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+
+[codigo de salida: 0]
+
+> wsl -d Ubuntu -- uname -r
+6.6.87.2-microsoft-standard-WSL2
+
+[codigo de salida: 0]

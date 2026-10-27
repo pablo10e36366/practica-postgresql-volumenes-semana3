@@ -1,0 +1,15 @@
+> docker run -d --name server_db2 --label edu.practica=postgresql-volumenes-semana3-pablo-ortega --env-file .env.local -p 127.0.0.1:5434:5432 --mount type=volume,source=pgdata,target=/var/lib/postgresql/data postgres:16
+08e1a4a1f0cc6f0c8069131b3a2e780f9dbacd417fd4cc48bcc396bab4f5e78d
+
+[codigo de salida: 0]
+
+> docker exec server_db2 pg_isready -h 127.0.0.1 -U postgres
+127.0.0.1:5432 - accepting connections
+
+[codigo de salida: 0]
+
+> docker inspect server_db2 --format "{{range .Mounts}}{{println .Type .Name .Destination}}{{end}}"
+volume pgdata /var/lib/postgresql/data
+
+
+[codigo de salida: 0]

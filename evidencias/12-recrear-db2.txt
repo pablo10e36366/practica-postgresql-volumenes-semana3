@@ -1,0 +1,24 @@
+> docker stop server_db2
+server_db2
+
+[codigo de salida: 0]
+
+> docker rm server_db2
+server_db2
+
+[codigo de salida: 0]
+
+> docker volume inspect pgdata --format "El volumen sigue disponible: {{.Name}}"
+El volumen sigue disponible: pgdata
+
+[codigo de salida: 0]
+
+> docker run -d --name server_db2 --label edu.practica=postgresql-volumenes-semana3-pablo-ortega --env-file .env.local -p 127.0.0.1:5434:5432 --mount type=volume,source=pgdata,target=/var/lib/postgresql/data postgres:16
+d658bf99887f1c29e88a15b315181d9e93d60ed020ee78c09ce96f81360c213e
+
+[codigo de salida: 0]
+
+> docker exec server_db2 pg_isready -h 127.0.0.1 -U postgres
+127.0.0.1:5432 - accepting connections
+
+[codigo de salida: 0]

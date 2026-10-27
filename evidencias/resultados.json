@@ -1,0 +1,72 @@
+{
+  "inicio_utc": "2026-10-27T02:24:15.383340+00:00",
+  "estado": "completado",
+  "pruebas": {
+    "db1_no_recupera_test": true,
+    "db1_volumen_anonimo_distinto": true,
+    "volumen_anonimo_anterior_conservado": true,
+    "db2_dos_registros_persisten": true,
+    "db2_mismo_cluster_y_volumen": true,
+    "db2_contenedor_recreado": true,
+    "contenedores_previos_conservados": true
+  },
+  "pgdata_existia_al_inicio": true,
+  "puertos": {
+    "server_db1": 5433,
+    "server_db2": 5434
+  },
+  "imagen_digest": "postgres@sha256:9e2cf6287f25c3151f4c9421ccce2b17f3e60061c111a29165e0d2cdd9ff0a97",
+  "db1_id_antes": "417ba5fb5b8579b59a85a32c177c9d1683fbc8af38f1c5f4ab92d767935af85c",
+  "db1_montaje_antes": {
+    "Type": "volume",
+    "Name": "67295c893ce03ed0924fbefcad0eca082d8277f04594390550701a3abf6c1f4a",
+    "Source": "/var/lib/docker/volumes/67295c893ce03ed0924fbefcad0eca082d8277f04594390550701a3abf6c1f4a/_data",
+    "Destination": "/var/lib/postgresql/data",
+    "Driver": "local",
+    "Mode": "",
+    "RW": true,
+    "Propagation": ""
+  },
+  "db1_cluster_antes": "7701167819844685863",
+  "db1_clientes_antes": "1|Cliente de demostracion|activo\n2|Cliente secundario|inactivo",
+  "db1_id_despues": "ca47c786982cbfc482a436243362b742717dc71098de81b39c3458d786e30e48",
+  "db1_montaje_despues": {
+    "Type": "volume",
+    "Name": "10c820024129530c94a4c32c1935fc3478aee18f2ad7d896b9967acd8e8ae1af",
+    "Source": "/var/lib/docker/volumes/10c820024129530c94a4c32c1935fc3478aee18f2ad7d896b9967acd8e8ae1af/_data",
+    "Destination": "/var/lib/postgresql/data",
+    "Driver": "local",
+    "Mode": "",
+    "RW": true,
+    "Propagation": ""
+  },
+  "db1_cluster_despues": "7701167884689227814",
+  "db2_id_antes": "08e1a4a1f0cc6f0c8069131b3a2e780f9dbacd417fd4cc48bcc396bab4f5e78d",
+  "db2_montaje_antes": {
+    "Type": "volume",
+    "Name": "pgdata",
+    "Source": "/var/lib/docker/volumes/pgdata/_data",
+    "Destination": "/var/lib/postgresql/data",
+    "Driver": "local",
+    "Mode": "z",
+    "RW": true,
+    "Propagation": ""
+  },
+  "db2_cluster_antes": "7701166918810390566",
+  "db2_clientes_antes": "1|Cliente de demostracion|activo\n2|Cliente secundario|inactivo",
+  "db2_id_despues": "d658bf99887f1c29e88a15b315181d9e93d60ed020ee78c09ce96f81360c213e",
+  "db2_montaje_despues": {
+    "Type": "volume",
+    "Name": "pgdata",
+    "Source": "/var/lib/docker/volumes/pgdata/_data",
+    "Destination": "/var/lib/postgresql/data",
+    "Driver": "local",
+    "Mode": "z",
+    "RW": true,
+    "Propagation": ""
+  },
+  "db2_cluster_despues": "7701166918810390566",
+  "db2_clientes_despues": "1|Cliente de demostracion|activo\n2|Cliente secundario|inactivo",
+  "fin_utc": "2026-10-27T02:24:59.843049+00:00",
+  "duracion_segundos": 44.46
+}

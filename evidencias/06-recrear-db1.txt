@@ -1,0 +1,19 @@
+> docker stop server_db1
+server_db1
+
+[codigo de salida: 0]
+
+> docker rm server_db1
+server_db1
+
+[codigo de salida: 0]
+
+> docker run -d --name server_db1 --label edu.practica=postgresql-volumenes-semana3-pablo-ortega --env-file .env.local -p 127.0.0.1:5433:5432 postgres:16
+ca47c786982cbfc482a436243362b742717dc71098de81b39c3458d786e30e48
+
+[codigo de salida: 0]
+
+> docker exec server_db1 pg_isready -h 127.0.0.1 -U postgres
+127.0.0.1:5432 - accepting connections
+
+[codigo de salida: 0]

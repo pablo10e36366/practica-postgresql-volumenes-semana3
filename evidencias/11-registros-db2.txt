@@ -1,0 +1,22 @@
+> docker exec -i server_db2 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d test
+SQL enviado por stdin:
+INSERT INTO customer (fullname, status) VALUES
+    ('Cliente de demostracion', 'activo'),
+    ('Cliente secundario', 'inactivo');
+
+INSERT 0 2
+
+[codigo de salida: 0]
+
+> docker exec -i server_db2 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d test
+SQL enviado por stdin:
+SELECT id, fullname, status FROM customer ORDER BY id;
+
+ id |        fullname         |  status  
+----+-------------------------+----------
+  1 | Cliente de demostracion | activo
+  2 | Cliente secundario      | inactivo
+(2 rows)
+
+
+[codigo de salida: 0]

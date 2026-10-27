@@ -1,0 +1,338 @@
+[
+  {
+    "comando": "docker version --format \"Cliente={{.Client.Version}} Servidor={{.Server.Version}}\"",
+    "stdin": null,
+    "stdout": "Cliente=29.4.1 Servidor=29.4.1\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:15.966614+00:00"
+  },
+  {
+    "comando": "docker info --format \"Motor={{.OSType}} / {{.OperatingSystem}}\"",
+    "stdin": null,
+    "stdout": "Motor=linux / Docker Desktop\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:16.336917+00:00"
+  },
+  {
+    "comando": "wsl -d Ubuntu -- head -n 3 /etc/os-release",
+    "stdin": null,
+    "stdout": "PRETTY_NAME=\"Ubuntu 24.04.4 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:16.482033+00:00"
+  },
+  {
+    "comando": "wsl -d Ubuntu -- uname -r",
+    "stdin": null,
+    "stdout": "6.6.87.2-microsoft-standard-WSL2\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:16.612846+00:00"
+  },
+  {
+    "comando": "docker image inspect postgres:16 --format \"{{index .RepoDigests 0}}\"",
+    "stdin": null,
+    "stdout": "postgres@sha256:9e2cf6287f25c3151f4c9421ccce2b17f3e60061c111a29165e0d2cdd9ff0a97\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:17.690148+00:00"
+  },
+  {
+    "comando": "docker image inspect postgres:16 --format \"{{json .Config.Volumes}}\"",
+    "stdin": null,
+    "stdout": "{\"/var/lib/postgresql/data\":{}}\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:17.796326+00:00"
+  },
+  {
+    "comando": "docker run -d --name server_db1 --label edu.practica=postgresql-volumenes-semana3-pablo-ortega --env-file .env.local -p 127.0.0.1:5433:5432 postgres:16",
+    "stdin": null,
+    "stdout": "417ba5fb5b8579b59a85a32c177c9d1683fbc8af38f1c5f4ab92d767935af85c\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:19.785441+00:00"
+  },
+  {
+    "comando": "docker exec server_db1 pg_isready -h 127.0.0.1 -U postgres",
+    "stdin": null,
+    "stdout": "127.0.0.1:5432 - accepting connections\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:23.698058+00:00"
+  },
+  {
+    "comando": "docker inspect server_db1 --format \"{{range .Mounts}}{{println .Type .Name .Destination}}{{end}}\"",
+    "stdin": null,
+    "stdout": "volume 67295c893ce03ed0924fbefcad0eca082d8277f04594390550701a3abf6c1f4a /var/lib/postgresql/data\n\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:23.967891+00:00"
+  },
+  {
+    "comando": "docker exec -i server_db1 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d postgres",
+    "stdin": "CREATE DATABASE test;\n",
+    "stdout": "CREATE DATABASE\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:25.047741+00:00"
+  },
+  {
+    "comando": "docker exec -i server_db1 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d test",
+    "stdin": "CREATE TABLE customer (\n    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n    fullname VARCHAR(120) NOT NULL,\n    status VARCHAR(20) NOT NULL CHECK (status IN ('activo', 'inactivo'))\n);\n",
+    "stdout": "CREATE TABLE\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:25.256625+00:00"
+  },
+  {
+    "comando": "docker exec server_db1 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d test -c \"\\d customer\"",
+    "stdin": null,
+    "stdout": "                                 Table \"public.customer\"\n  Column  |          Type          | Collation | Nullable |           Default            \n----------+------------------------+-----------+----------+------------------------------\n id       | integer                |           | not null | generated always as identity\n fullname | character varying(120) |           | not null | \n status   | character varying(20)  |           | not null | \nIndexes:\n    \"customer_pkey\" PRIMARY KEY, btree (id)\nCheck constraints:\n    \"customer_status_check\" CHECK (status::text = ANY (ARRAY['activo'::character varying, 'inactivo'::character varying]::text[]))\n\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:25.432732+00:00"
+  },
+  {
+    "comando": "docker exec -i server_db1 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d test",
+    "stdin": "INSERT INTO customer (fullname, status) VALUES\n    ('Cliente de demostracion', 'activo'),\n    ('Cliente secundario', 'inactivo');\n",
+    "stdout": "INSERT 0 2\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:26.422200+00:00"
+  },
+  {
+    "comando": "docker exec -i server_db1 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d test",
+    "stdin": "SELECT id, fullname, status FROM customer ORDER BY id;\n",
+    "stdout": " id |        fullname         |  status  \n----+-------------------------+----------\n  1 | Cliente de demostracion | activo\n  2 | Cliente secundario      | inactivo\n(2 rows)\n\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:26.592558+00:00"
+  },
+  {
+    "comando": "docker stop server_db1",
+    "stdin": null,
+    "stdout": "server_db1\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:34.320775+00:00"
+  },
+  {
+    "comando": "docker rm server_db1",
+    "stdin": null,
+    "stdout": "server_db1\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:34.542636+00:00"
+  },
+  {
+    "comando": "docker run -d --name server_db1 --label edu.practica=postgresql-volumenes-semana3-pablo-ortega --env-file .env.local -p 127.0.0.1:5433:5432 postgres:16",
+    "stdin": null,
+    "stdout": "ca47c786982cbfc482a436243362b742717dc71098de81b39c3458d786e30e48\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:35.420341+00:00"
+  },
+  {
+    "comando": "docker exec server_db1 pg_isready -h 127.0.0.1 -U postgres",
+    "stdin": null,
+    "stdout": "127.0.0.1:5432 - accepting connections\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:40.473787+00:00"
+  },
+  {
+    "comando": "docker exec -i server_db1 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d postgres",
+    "stdin": "SELECT datname FROM pg_database WHERE datname = 'test';\nSELECT EXISTS (SELECT 1 FROM pg_database WHERE datname = 'test') AS test_disponible;\n",
+    "stdout": " datname \n---------\n(0 rows)\n\n test_disponible \n-----------------\n f\n(1 row)\n\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:41.666274+00:00"
+  },
+  {
+    "comando": "docker exec server_db1 psql -X -U postgres -d test -c \"SELECT 1;\"",
+    "stdin": null,
+    "stdout": "",
+    "stderr": "psql: error: connection to server on socket \"/var/run/postgresql/.s.PGSQL.5432\" failed: FATAL:  database \"test\" does not exist\n",
+    "codigo": 2,
+    "utc": "2026-10-27T02:24:41.845750+00:00"
+  },
+  {
+    "comando": "docker volume inspect 67295c893ce03ed0924fbefcad0eca082d8277f04594390550701a3abf6c1f4a --format \"Volumen anterior conservado: {{.Name}}\"",
+    "stdin": null,
+    "stdout": "Volumen anterior conservado: 67295c893ce03ed0924fbefcad0eca082d8277f04594390550701a3abf6c1f4a\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:41.899921+00:00"
+  },
+  {
+    "comando": "docker inspect server_db1 --format \"Volumen del contenedor nuevo: {{range .Mounts}}{{.Name}}{{end}}\"",
+    "stdin": null,
+    "stdout": "Volumen del contenedor nuevo: 10c820024129530c94a4c32c1935fc3478aee18f2ad7d896b9967acd8e8ae1af\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:41.956956+00:00"
+  },
+  {
+    "comando": "docker volume create --label edu.practica=postgresql-volumenes-semana3-pablo-ortega pgdata",
+    "stdin": null,
+    "stdout": "pgdata\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:42.999999+00:00"
+  },
+  {
+    "comando": "docker volume inspect pgdata --format \"Nombre={{.Name}} Controlador={{.Driver}}\"",
+    "stdin": null,
+    "stdout": "Nombre=pgdata Controlador=local\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:43.053891+00:00"
+  },
+  {
+    "comando": "docker run -d --name server_db2 --label edu.practica=postgresql-volumenes-semana3-pablo-ortega --env-file .env.local -p 127.0.0.1:5434:5432 --mount type=volume,source=pgdata,target=/var/lib/postgresql/data postgres:16",
+    "stdin": null,
+    "stdout": "08e1a4a1f0cc6f0c8069131b3a2e780f9dbacd417fd4cc48bcc396bab4f5e78d\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:45.137181+00:00"
+  },
+  {
+    "comando": "docker exec server_db2 pg_isready -h 127.0.0.1 -U postgres",
+    "stdin": null,
+    "stdout": "127.0.0.1:5432 - accepting connections\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:45.485567+00:00"
+  },
+  {
+    "comando": "docker inspect server_db2 --format \"{{range .Mounts}}{{println .Type .Name .Destination}}{{end}}\"",
+    "stdin": null,
+    "stdout": "volume pgdata /var/lib/postgresql/data\n\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:45.789388+00:00"
+  },
+  {
+    "comando": "docker exec -i server_db2 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d postgres",
+    "stdin": "CREATE DATABASE test;\n",
+    "stdout": "CREATE DATABASE\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:47.198467+00:00"
+  },
+  {
+    "comando": "docker exec -i server_db2 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d test",
+    "stdin": "CREATE TABLE customer (\n    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n    fullname VARCHAR(120) NOT NULL,\n    status VARCHAR(20) NOT NULL CHECK (status IN ('activo', 'inactivo'))\n);\n",
+    "stdout": "CREATE TABLE\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:47.447722+00:00"
+  },
+  {
+    "comando": "docker exec server_db2 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d test -c \"\\d customer\"",
+    "stdin": null,
+    "stdout": "                                 Table \"public.customer\"\n  Column  |          Type          | Collation | Nullable |           Default            \n----------+------------------------+-----------+----------+------------------------------\n id       | integer                |           | not null | generated always as identity\n fullname | character varying(120) |           | not null | \n status   | character varying(20)  |           | not null | \nIndexes:\n    \"customer_pkey\" PRIMARY KEY, btree (id)\nCheck constraints:\n    \"customer_status_check\" CHECK (status::text = ANY (ARRAY['activo'::character varying, 'inactivo'::character varying]::text[]))\n\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:47.638264+00:00"
+  },
+  {
+    "comando": "docker exec -i server_db2 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d test",
+    "stdin": "INSERT INTO customer (fullname, status) VALUES\n    ('Cliente de demostracion', 'activo'),\n    ('Cliente secundario', 'inactivo');\n",
+    "stdout": "INSERT 0 2\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:48.641794+00:00"
+  },
+  {
+    "comando": "docker exec -i server_db2 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d test",
+    "stdin": "SELECT id, fullname, status FROM customer ORDER BY id;\n",
+    "stdout": " id |        fullname         |  status  \n----+-------------------------+----------\n  1 | Cliente de demostracion | activo\n  2 | Cliente secundario      | inactivo\n(2 rows)\n\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:48.819401+00:00"
+  },
+  {
+    "comando": "docker stop server_db2",
+    "stdin": null,
+    "stdout": "server_db2\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:52.173020+00:00"
+  },
+  {
+    "comando": "docker rm server_db2",
+    "stdin": null,
+    "stdout": "server_db2\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:52.419581+00:00"
+  },
+  {
+    "comando": "docker volume inspect pgdata --format \"El volumen sigue disponible: {{.Name}}\"",
+    "stdin": null,
+    "stdout": "El volumen sigue disponible: pgdata\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:52.484255+00:00"
+  },
+  {
+    "comando": "docker run -d --name server_db2 --label edu.practica=postgresql-volumenes-semana3-pablo-ortega --env-file .env.local -p 127.0.0.1:5434:5432 --mount type=volume,source=pgdata,target=/var/lib/postgresql/data postgres:16",
+    "stdin": null,
+    "stdout": "d658bf99887f1c29e88a15b315181d9e93d60ed020ee78c09ce96f81360c213e\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:53.703331+00:00"
+  },
+  {
+    "comando": "docker exec server_db2 pg_isready -h 127.0.0.1 -U postgres",
+    "stdin": null,
+    "stdout": "127.0.0.1:5432 - accepting connections\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:56.413348+00:00"
+  },
+  {
+    "comando": "docker exec -i server_db2 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d postgres",
+    "stdin": "SELECT datname FROM pg_database WHERE datname = 'test';\nSELECT EXISTS (SELECT 1 FROM pg_database WHERE datname = 'test') AS test_disponible;\n",
+    "stdout": " datname \n---------\n test\n(1 row)\n\n test_disponible \n-----------------\n t\n(1 row)\n\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:57.635275+00:00"
+  },
+  {
+    "comando": "docker exec -i server_db2 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d test",
+    "stdin": "SELECT id, fullname, status FROM customer ORDER BY id;\n",
+    "stdout": " id |        fullname         |  status  \n----+-------------------------+----------\n  1 | Cliente de demostracion | activo\n  2 | Cliente secundario      | inactivo\n(2 rows)\n\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:57.804618+00:00"
+  },
+  {
+    "comando": "docker ps --filter label=edu.practica=postgresql-volumenes-semana3-pablo-ortega --format \"table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}\"",
+    "stdin": null,
+    "stdout": "NAMES        IMAGE         STATUS          PORTS\nserver_db2   postgres:16   Up 5 seconds    127.0.0.1:5434->5432/tcp\nserver_db1   postgres:16   Up 24 seconds   127.0.0.1:5433->5432/tcp\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:58.860210+00:00"
+  },
+  {
+    "comando": "docker volume ls --filter label=edu.practica=postgresql-volumenes-semana3-pablo-ortega --format \"table {{.Name}}\t{{.Driver}}\"",
+    "stdin": null,
+    "stdout": "VOLUME NAME   DRIVER\npgdata        local\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:58.913689+00:00"
+  },
+  {
+    "comando": "docker inspect server_db2 --format \"{{range .Mounts}}{{println .Name \\\"->\\\" .Destination}}{{end}}\"",
+    "stdin": null,
+    "stdout": "pgdata -> /var/lib/postgresql/data\n\n",
+    "stderr": "",
+    "codigo": 0,
+    "utc": "2026-10-27T02:24:58.970326+00:00"
+  }
+]

@@ -1,0 +1,34 @@
+> docker exec -i server_db2 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d postgres
+SQL enviado por stdin:
+CREATE DATABASE test;
+
+CREATE DATABASE
+
+[codigo de salida: 0]
+
+> docker exec -i server_db2 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d test
+SQL enviado por stdin:
+CREATE TABLE customer (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    fullname VARCHAR(120) NOT NULL,
+    status VARCHAR(20) NOT NULL CHECK (status IN ('activo', 'inactivo'))
+);
+
+CREATE TABLE
+
+[codigo de salida: 0]
+
+> docker exec server_db2 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d test -c "\d customer"
+                                 Table "public.customer"
+  Column  |          Type          | Collation | Nullable |           Default            
+----------+------------------------+-----------+----------+------------------------------
+ id       | integer                |           | not null | generated always as identity
+ fullname | character varying(120) |           | not null | 
+ status   | character varying(20)  |           | not null | 
+Indexes:
+    "customer_pkey" PRIMARY KEY, btree (id)
+Check constraints:
+    "customer_status_check" CHECK (status::text = ANY (ARRAY['activo'::character varying, 'inactivo'::character varying]::text[]))
+
+
+[codigo de salida: 0]

@@ -1,0 +1,31 @@
+> docker exec -i server_db1 psql -X -v ON_ERROR_STOP=1 -P pager=off -U postgres -d postgres
+SQL enviado por stdin:
+SELECT datname FROM pg_database WHERE datname = 'test';
+SELECT EXISTS (SELECT 1 FROM pg_database WHERE datname = 'test') AS test_disponible;
+
+ datname 
+---------
+(0 rows)
+
+ test_disponible 
+-----------------
+ f
+(1 row)
+
+
+[codigo de salida: 0]
+
+> docker exec server_db1 psql -X -U postgres -d test -c "SELECT 1;"
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "test" does not exist
+
+[codigo de salida: 2]
+
+> docker volume inspect 67295c893ce03ed0924fbefcad0eca082d8277f04594390550701a3abf6c1f4a --format "Volumen anterior conservado: {{.Name}}"
+Volumen anterior conservado: 67295c893ce03ed0924fbefcad0eca082d8277f04594390550701a3abf6c1f4a
+
+[codigo de salida: 0]
+
+> docker inspect server_db1 --format "Volumen del contenedor nuevo: {{range .Mounts}}{{.Name}}{{end}}"
+Volumen del contenedor nuevo: 10c820024129530c94a4c32c1935fc3478aee18f2ad7d896b9967acd8e8ae1af
+
+[codigo de salida: 0]

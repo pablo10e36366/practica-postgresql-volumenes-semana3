@@ -1,0 +1,18 @@
+> docker ps --filter label=edu.practica=postgresql-volumenes-semana3-pablo-ortega --format "table {{.Names}}	{{.Image}}	{{.Status}}	{{.Ports}}"
+NAMES        IMAGE         STATUS          PORTS
+server_db2   postgres:16   Up 5 seconds    127.0.0.1:5434->5432/tcp
+server_db1   postgres:16   Up 24 seconds   127.0.0.1:5433->5432/tcp
+
+[codigo de salida: 0]
+
+> docker volume ls --filter label=edu.practica=postgresql-volumenes-semana3-pablo-ortega --format "table {{.Name}}	{{.Driver}}"
+VOLUME NAME   DRIVER
+pgdata        local
+
+[codigo de salida: 0]
+
+> docker inspect server_db2 --format "{{range .Mounts}}{{println .Name \"->\" .Destination}}{{end}}"
+pgdata -> /var/lib/postgresql/data
+
+
+[codigo de salida: 0]
