@@ -1,0 +1,6 @@
+Administrador: pgAdmin 4 / Query Tool
+Servidor: 127.0.0.1:5434; base test; usuario postgres
+SQL: SELECT id, fullname, status FROM customer ORDER BY id;
+Filas: 1 | Cliente de demostracion | activo
+       2 | Cliente secundario | inactivo
+Resultado observado en interfaz: Total rows: 2.

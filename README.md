@@ -11,7 +11,7 @@ Se ejecutaron dos pruebas reales con PostgreSQL 16: al sustituir server_db1 sin 
 ## Archivos
 
 - `informe.md`: los diez apartados del docente, fundamentos, procedimiento y bibliografía APA.
-- `evidencias/`: 14 capturas reales, salidas TXT, un diagrama conceptual, resultados JSON y registro de comandos.
+- `evidencias/`: 16 capturas reales, salidas TXT, un diagrama conceptual, resultados JSON y registro de comandos.
 - `scripts/`: SQL, ejecución completa y consulta de resultados.
 - `.env.example`: nombre de la variable de contraseña, sin un secreto.
 
@@ -46,6 +46,6 @@ El parámetro técnico `--reuse-owned-empty-volume` se utilizó únicamente en l
 
 ## Evidencias y alcance
 
-Las capturas se tomaron durante la ejecución real de los comandos. Se recortó solamente el marco de la ventana para evitar mostrar el escritorio. Los registros TXT y JSON conservan las instrucciones, entradas SQL y salidas. `resultados.json` contiene siete comprobaciones exitosas y los identificadores antes/después. `creacion-original-pgdata.txt` registra su primera creación; el volumen se conservó al repetir la captura.
+Las capturas se tomaron durante la ejecución real: catorce de consola y dos de consultas gráficas con pgAdmin 4. Las conexiones de pgAdmin se configuraron de manera aislada y se cerró la sesión auxiliar al finalizar. Consulta [conectar-pgadmin.md](scripts/conectar-pgadmin.md) para repetir la conexión desde la aplicación habitual. Se recortó solamente el marco de la ventana para evitar mostrar el escritorio. Los registros TXT y JSON conservan las instrucciones, entradas SQL y salidas. `resultados.json` contiene siete comprobaciones exitosas y los identificadores antes/después. `creacion-original-pgdata.txt` registra su primera creación; el volumen se conservó al repetir la captura.
 
 No se generó audio MP3. La contraseña local, respaldos de preparación, credenciales de GitHub y archivos auxiliares están excluidos del repositorio.

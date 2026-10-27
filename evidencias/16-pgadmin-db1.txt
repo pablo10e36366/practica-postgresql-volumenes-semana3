@@ -1,0 +1,4 @@
+Administrador: pgAdmin 4 / Query Tool
+Servidor: 127.0.0.1:5433; base postgres; usuario postgres
+SQL: SELECT EXISTS (SELECT 1 FROM pg_database WHERE datname='test') AS test_disponible;
+Resultado observado: test_disponible = false.

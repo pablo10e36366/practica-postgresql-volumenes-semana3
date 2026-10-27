@@ -50,7 +50,7 @@ La comparación requiere una precisión: la imagen oficial puede crear un volume
 - Computadora con Windows 11, Ubuntu 24.04.4 LTS en WSL 2 y Docker Desktop iniciado.
 - Docker CLI y Engine 29.4.1; imagen oficial `postgres:16` y cliente `psql` incluido en ella.
 - PowerShell y Python 3.10 para automatizar y registrar la ejecución; Pillow para capturar la consola.
-- Visual Studio Code para revisar Markdown y SQL; Git y una cuenta de GitHub para entregar el repositorio.
+- Visual Studio Code para revisar Markdown y SQL; pgAdmin 4 para las consultas gráficas; Git y una cuenta de GitHub para entregar el repositorio.
 - Dos puertos locales disponibles: 5433 y 5434 en esta ejecución.
 
 ## 7. Material de apoyo
@@ -73,7 +73,7 @@ Los puertos se vincularon a `127.0.0.1`, limitando su publicación al equipo loc
 
 **Nota de trazabilidad:** se ejecutó un primer ensayo completo y correcto. Se repitieron únicamente los datos ficticios de este proyecto para corregir el tamaño de las capturas. Antes de repetir se respaldó esa base de demostración, se retiraron sus contenedores etiquetados y se vació exclusivamente su base `test`; se conservó el volumen `pgdata`. Ningún recurso anterior ajeno fue eliminado ni alterado. El ensayo fotografiado creó sus tablas antes de las pruebas de eliminación y no las recreó después. La creación original de `pgdata` se conserva en un registro adicional.
 
-Las 14 capturas se obtuvieron de la consola **durante la ejecución automatizada**. Sólo se recortó el marco de la ventana para excluir el escritorio; las instrucciones y salidas no se modificaron. Cada imagen mide menos de 800 píxeles de ancho y tiene una transcripción `.txt` asociada. Todos los comandos y las entradas SQL del ensayo están en [comandos-ejecutados.json](evidencias/comandos-ejecutados.json).
+Las primeras 14 capturas se obtuvieron de la consola **durante la ejecución automatizada**. Se añadieron dos capturas directas de consultas ejecutadas en pgAdmin 4. Sólo se recortó el marco de la ventana para excluir el escritorio; las instrucciones y salidas no se modificaron. Cada imagen mide menos de 800 píxeles de ancho y tiene una transcripción `.txt` asociada. Todos los comandos y las entradas SQL del ensayo están en [comandos-ejecutados.json](evidencias/comandos-ejecutados.json).
 
 ### 8.2. Verificación de Docker y Ubuntu
 
@@ -399,6 +399,34 @@ docker inspect server_db2 --format "{{range .Mounts}}{{println .Name \"->\" .Des
 
 [Salida completa de esta etapa](evidencias/14-estado-final.txt).
 
+### 8.16. Comprobaciones gráficas con pgAdmin 4
+
+Después de las pruebas automatizadas se conectó el administrador gráfico pgAdmin 4 a ambos servidores. Se utilizó una configuración aislada en la carpeta local de esta práctica para conservar los ajustes anteriores de la aplicación. Las conexiones usaron `127.0.0.1`, puertos 5433 y 5434, usuario `postgres` y la contraseña local, que no aparece en las imágenes. El registro de instrucciones para repetir esas conexiones está en [conectar-pgadmin.md](scripts/conectar-pgadmin.md).
+
+En Query Tool del primer servidor se consultó `pg_database`: `test_disponible` devolvió `false`. En el segundo, el SELECT a `test.customer` devolvió los mismos dos clientes. Fueron consultas nuevas ejecutadas contra los contenedores finales, no imágenes de resultados simulados. El editor SQL y el panel Data Output permiten observar la instrucción y su respuesta en una sola pantalla (pgAdmin Development Team, s. f.).
+
+```sql
+-- server_db1: conectado a postgres
+SELECT EXISTS (
+    SELECT 1 FROM pg_database WHERE datname = 'test'
+) AS test_disponible;
+
+-- server_db2: conectado a test
+SELECT id, fullname, status
+FROM customer
+ORDER BY id;
+```
+
+<figure>
+<img src="evidencias/15-pgadmin-consulta.png" alt="Consulta gráfica de los dos clientes persistentes en pgAdmin" width="800">
+<figcaption>Figura 16. SELECT real en pgAdmin 4: los dos clientes siguen en server_db2.</figcaption>
+</figure>
+
+<figure>
+<img src="evidencias/16-pgadmin-db1.png" alt="Consulta gráfica de ausencia de test en server_db1" width="800">
+<figcaption>Figura 17. Consulta real en pgAdmin 4: test_disponible es false en server_db1.</figcaption>
+</figure>
+
 ## 9. Resultados esperados
 
 Los resultados esperados se contrastaron con consultas reales y coincidieron con lo observado:
@@ -447,6 +475,8 @@ Docker. (s. f.-d). *What is a container?* Docker Docs. https://docs.docker.com/g
 Docker. (s. f.-e). *What is an image?* Docker Docs. https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-an-image/
 
 maguaman2. (s. f.). *informe-tendencias: informe.md* [Plantilla de informe]. GitHub. https://github.com/maguaman2/informe-tendencias/blob/main/informe.md
+
+pgAdmin Development Team. (s. f.). *Query Tool*. pgAdmin 4 Documentation. https://www.pgadmin.org/docs/pgadmin4/latest/query_tool.html
 
 PostgreSQL Global Development Group. (s. f.-a). *Creating a new table*. PostgreSQL 16 Documentation. https://www.postgresql.org/docs/16/tutorial-table.html
 
